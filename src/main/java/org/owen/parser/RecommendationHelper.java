@@ -98,4 +98,28 @@ public class RecommendationHelper {
 		return result.toString();
 	}
 
+	public String getDashboardData() {
+		JSONArray result = new JSONArray();
+		DatabaseConnectionHelper dch = DatabaseConnectionHelper.getDBHelper();
+		try (CallableStatement cstmt = dch.masterDS.getConnection().prepareCall("{call getRecommendations(?,?,?,?)}");
+				ResultSet rs = cstmt.executeQuery()) {
+			while (rs.next()) {
+				JSONObject jObj = new JSONObject();
+				jObj.put("resultId", rs.getInt("result_id"));
+				jObj.put("fileName", rs.getString("file_name"));
+				jObj.put("filePath", rs.getString("file_path"));
+				jObj.put("jd", rs.getString("jd"));
+				jObj.put("status", rs.getString("status"));
+				jObj.put("score", rs.getInt("score"));
+				jObj.put("keywords", rs.getString("keywords"));
+				jObj.put("experience", rs.getString("experience"));
+				jObj.put("qualification", rs.getString("qualification"));
+				result.put(jObj);
+			}
+		} catch (Exception e) {
+			Logger.getLogger(RecommendationHelper.class).error("Exception while fetching dashboard data", e);
+		}
+		return result.toString();
+	}
+
 }
