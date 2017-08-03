@@ -89,6 +89,7 @@ public class RecommendationHelper {
 					jObj.put("keywords", rs.getString("keywords"));
 					jObj.put("experience", rs.getString("experience"));
 					jObj.put("qualification", rs.getString("qualification"));
+					jObj.put("location", rs.getString("location"));
 					result.put(jObj);
 				}
 			}
@@ -101,7 +102,7 @@ public class RecommendationHelper {
 	public String getDashboardData() {
 		JSONArray result = new JSONArray();
 		DatabaseConnectionHelper dch = DatabaseConnectionHelper.getDBHelper();
-		try (CallableStatement cstmt = dch.masterDS.getConnection().prepareCall("{call getRecommendations(?,?,?,?)}");
+		try (CallableStatement cstmt = dch.masterDS.getConnection().prepareCall("{call getDashboardData()}");
 				ResultSet rs = cstmt.executeQuery()) {
 			while (rs.next()) {
 				JSONObject jObj = new JSONObject();
@@ -114,6 +115,8 @@ public class RecommendationHelper {
 				jObj.put("keywords", rs.getString("keywords"));
 				jObj.put("experience", rs.getString("experience"));
 				jObj.put("qualification", rs.getString("qualification"));
+				jObj.put("location", rs.getString("location"));
+				jObj.put("value", 1);
 				result.put(jObj);
 			}
 		} catch (Exception e) {
